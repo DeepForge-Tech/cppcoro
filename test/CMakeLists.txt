@@ -9,7 +9,7 @@ add_library(tests-main STATIC
 	main.cpp
 	counted.cpp
 )
-target_link_libraries(tests-main PUBLIC cppcoro_static doctest::doctest Threads::Threads)
+target_link_libraries(tests-main PUBLIC cppcoro doctest::doctest Threads::Threads)
 
 set(tests
 	generator_tests.cpp
