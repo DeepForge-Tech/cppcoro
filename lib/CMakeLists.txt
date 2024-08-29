@@ -200,15 +200,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
     )
     list(APPEND sources ${linuxSources})
 endif()
-if(BUILD_SHARED_LIBS)
-add_library(cppcoro SHARED
-	${includes}
-	${netIncludes}
-	${detailIncludes}
-	${privateHeaders}
-	${sources}
-)
-else()
+
 add_library(cppcoro STATIC
 	${includes}
 	${netIncludes}
@@ -216,7 +208,6 @@ add_library(cppcoro STATIC
 	${privateHeaders}
 	${sources}
 )
-endif()
 
 target_include_directories(cppcoro PUBLIC
 	$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
