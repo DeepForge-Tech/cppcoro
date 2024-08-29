@@ -200,7 +200,15 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
     )
     list(APPEND sources ${linuxSources})
 endif()
-
+if(BUILD_SHARED_LIBS)
+add_library(cppcoro SHARED
+	${includes}
+	${netIncludes}
+	${detailIncludes}
+	${privateHeaders}
+	${sources}
+)
+else()
 add_library(cppcoro STATIC
 	${includes}
 	${netIncludes}
@@ -208,33 +216,19 @@ add_library(cppcoro STATIC
 	${privateHeaders}
 	${sources}
 )
-add_library(cppcoro_shared SHARED
-	${includes}
-	${netIncludes}
-	${detailIncludes}
-	${privateHeaders}
-	${sources}
-)
+endif()
 
 target_include_directories(cppcoro PUBLIC
-	$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-	$<INSTALL_INTERFACE:include>)
-
- target_include_directories(cppcoro_shared PUBLIC
 	$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>)
 
 target_compile_definitions(cppcoro PUBLIC ${compile_definition})
 target_compile_options(cppcoro PUBLIC ${compile_options})
 
-target_compile_definitions(cppcoro_shared PUBLIC ${compile_definition})
-target_compile_options(cppcoro_shared PUBLIC ${compile_options})
-
 find_package(Coroutines COMPONENTS Experimental Final REQUIRED)
 target_link_libraries(cppcoro PUBLIC std::coroutines ${libraries})
-target_link_libraries(cppcoro_shared PUBLIC std::coroutines ${libraries})
 
-install(TARGETS cppcoro cppcoro_shared EXPORT cppcoroTargets
+install(TARGETS cppcoro EXPORT cppcoroTargets
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 	RUNTIME DESTINATION bin)
